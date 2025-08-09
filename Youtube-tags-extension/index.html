@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>YouTube Tag Manager</title>
+  <link rel="stylesheet" href="site-style.css" />
+  <style>
+    /* Lightweight inline styles to keep layout stable if your external CSS isn't loaded */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 18px;
+      color: #111;
+    }
+    h2 { margin: 0 0 20px 0; font-size: 30; }
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .controls input[type="text"], .controls select {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      min-width: 120px;
+    }
+    .controls button {
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      background: #f6f6f6;
+      cursor: pointer;
+    }
+    #results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px 28px;
+      margin-top: 0px;
+    }
+    .video-entry {
+      max-width: 267px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: stretch;
+    }
+    .video-entry img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .video-entry .title {
+      font-size: 20px;
+      font-weight: 500;
+      margin: 4px 0;
+      line-height: 1.2;
+      min-height: 36px;
+    }
+    .tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px; }
+    .tag {
+      font-size: 15px;
+      padding: 3px 6px;
+      border-radius: 999px;
+      background:#eee;
+    }
+    .tag.composer { background:rgb(231, 231, 226); }
+    .tag.genre { background:#def; }
+    .tag.mood { background:#fed; }
+    .video-entry .buttons {
+      display:flex;
+      gap:8px;
+      justify-content:flex-end;
+    }
+    .video-entry.playing {
+      border: 2px solid #2196F3;
+      background-color: #eaf4ff;
+    }
+
+    /* Playlist controls + player */
+    #playlistControls {
+      margin-top: 14px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    #playlistControls button {
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+    #nowPlaying {
+      margin-left: 8px;
+      font-weight: 600;
+    }
+
+    #playerContainer {
+      margin-top: 12px;
+      display: none; /* shown by JS when playlist active */
+    }
+    #ytplayer {
+      width: 100%;
+      max-width: 720px;
+      height: 405px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Responsive tweak */
+    @media (max-width:600px) {
+      #ytplayer { height: 220px; }
+      .controls input[type="text"] { min-width: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <h2>YouTube Tag Manager</h2>
+
+  <div class="controls">
+    <label>
+      Mode:
+      <select id="modeSelect">
+        <option value="title">Title</option>
+        <option value="tags">Filters</option>
+      </select>
+    </label>
+
+    <!-- Title Search Input -->
+    <input type="text" id="titleInput" placeholder="Title" />
+
+    <!-- Tag Filter Inputs -->
+    <input type="text" id="composerInput" placeholder="Composer" />
+    <input type="text" id="genreInput" placeholder="Genre" />
+    <input type="text" id="moodInput" placeholder="Mood" />
+
+    <button id="goBtn">Go</button>
+    <button id="startPlaylistBtn" style="display:none;">Start Playlist</button>
+  </div>
+
+  <div id="results"></div>
+
+  <div id="playlistControls" aria-hidden="true">
+    <button id="prevBtn">Prev</button>
+    <button id="pauseBtn">Pause</button>
+    <button id="playBtn" style="display:none;">Play</button>
+    <button id="nextBtn">Next</button>
+    <button id="stopBtn">Stop</button>
+    <span id="nowPlaying"></span>
+  </div>
+
+  <div id="playerContainer" aria-hidden="true">
+    <div id="ytplayer"></div>
+  </div>
+
+  <!-- search.js must be loaded last so DOM elements exist.
+       search.js will dynamically load the YouTube iframe API. -->
+  <script src="search.js"></script>
+</body>
+</html>

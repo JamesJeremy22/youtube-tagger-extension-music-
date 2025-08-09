@@ -1,0 +1,2 @@
+# youtube-tagger-extension-music
+A browser extension that allows you to save tags on Youtube videos (music) for the composer, the genre, and the mood. There is an attached website that allows searching and filtering for these tags as well as a playlist feature. Use at your own risk, as this has a lot of bugs and missing features. The ideas, not the code, are by me though. The license used is CC NY-BC 4.0, which means you can use it for any purpose except direct commercialization, like selling the software.
